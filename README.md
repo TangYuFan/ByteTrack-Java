@@ -12,10 +12,7 @@
 | **匈牙利匹配**         | 使用成熟库/linear_sum_assignment                                | 自实现匈牙利算法                       | 算法结果一致，但性能可能略低   |
 | **高置信度匹配**        | 匹配后更新 KF，hitStreak++，状态激活                                  | 相同逻辑                           | 一致               |
 | **低置信度匹配**        | Tentative Track 更新，classId + gating                        | 更新策略略不同（只匹配 classId + low IOU） | 对追踪精度影响较小，但策略略简化 |
-| **新建 Track**      | 未匹配的高置信度检测创建新 Track                                        | 相同逻辑                           | 一致               |
-| **Track 删除**      | lost 超过阈值删除                                                | 同样删除                           | 一致               |
-| **KF 更新顺序**       | 先 predict → 再 update                                       | 相同顺序                           | 一致               |
-| **匹配容器**          | 索引或数组                                                      | Map<Track, Detection>          | 可读性更高，不影响结果      |
+
 
 ## Demo
 
