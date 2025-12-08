@@ -22,3 +22,31 @@
 
 
 
+
+## 官方原版实现 JNI WAPPER
+
+// 对应的 JAVA 接口
+package com.example.bytetrack;
+import java.util.List;
+public class ByteTrackJni {
+    static {
+        System.loadLibrary("bytetrack"); // libbytetrack.so
+    }
+public native void initTracker(int fps, int trackBuffer);
+public native List<float[]> updateTracker(float[] detections, float[] probs);
+public native void releaseTracker();
+}
+
+
+// 对应的 JAVA 调用示例
+ByteTrackJni tracker = new ByteTrackJni();       // 跟踪器，注意非多线程安全
+tracker.initTracker(30, 30);                     // fps：视频帧率（用于卡尔曼滤波预测），trackBuffer：目标丢失多少帧后删除轨迹
+float[] dets = {x1, y1, w1, h1, x2, y2, w2, h2}; // 每帧检测结果目标边框， xywh、xywh、xywh ..（注意这里输入非归一化后的位置坐标信息）
+float[] probs = {0.9f, 0.8f};                    // 每帧检测结果目标置信度：score、score ..
+List<float[]> tracks = tracker.updateTracker(dets, probs);   // 输出跟踪后的id、置信度和边框
+for (float[] t : tracks) {
+    int trackId = (int) t[0];     // id
+    float prob = t[1];            // 置信度
+    float x = t[2], y = t[3], w = t[4], h = t[5]; // 边框
+}
+tracker.releaseTracker();                         // 销毁跟踪器
